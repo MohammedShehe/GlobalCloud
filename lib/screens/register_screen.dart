@@ -5,6 +5,7 @@ import '../widgets/animated_background.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/gradient_button.dart';
 import 'login_screen.dart';
+import 'payment_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -191,6 +192,7 @@ class _RegisterScreenState extends State<RegisterScreen>
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                // Success Icon
                 Container(
                   width: 80,
                   height: 80,
@@ -210,6 +212,8 @@ class _RegisterScreenState extends State<RegisterScreen>
                   ),
                 ),
                 const SizedBox(height: 24),
+                
+                // Success Title
                 Text(
                   'Registration Successful!',
                   style: GoogleFonts.montserrat(
@@ -219,59 +223,280 @@ class _RegisterScreenState extends State<RegisterScreen>
                   ),
                 ),
                 const SizedBox(height: 16),
-                Text(
-                  'Your family has been registered successfully.\n\n'
-                  'Family Name: ${_familyNameController.text}\n'
-                  'Total Members: ${_familyMembers.length}\n'
-                  'Admin: ${_familyMembers[_selectedAdminIndex!].fullName}\n\n'
-                  'All family members can now sign in using their full name '
-                  '(First, Second, Third) and the family password.',
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.montserrat(
-                    fontSize: 14,
-                    color: Colors.white70,
-                    height: 1.6,
+                
+                // Family Details
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.05),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: Colors.blue.withOpacity(0.3),
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      _buildDetailRow(
+                        'Family Name:',
+                        _familyNameController.text,
+                      ),
+                      const SizedBox(height: 8),
+                      _buildDetailRow(
+                        'Total Members:',
+                        '${_familyMembers.length}',
+                      ),
+                      const SizedBox(height: 8),
+                      _buildDetailRow(
+                        'Admin:',
+                        _familyMembers[_selectedAdminIndex!].fullName,
+                      ),
+                    ],
                   ),
                 ),
+                
+                const SizedBox(height: 20),
+                
+                // Trial Info
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.blue.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: Colors.blue.withOpacity(0.3),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.card_giftcard,
+                        color: Colors.blue.shade300,
+                        size: 24,
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '30-Day Free Trial',
+                              style: GoogleFonts.montserrat(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.blue.shade300,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              'Get full access to all features for 30 days. No payment required.',
+                              style: GoogleFonts.montserrat(
+                                fontSize: 12,
+                                color: Colors.white70,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                
                 const SizedBox(height: 24),
-                GradientButton(
-                  onPressed: () {
-                    Navigator.pop(context); // Close dialog
-                    Navigator.pushReplacement(
-                      context,
-                      PageRouteBuilder(
-                        pageBuilder: (context, animation, secondaryAnimation) =>
-                            const LoginScreen(),
-                        transitionsBuilder: (
-                          context,
-                          animation,
-                          secondaryAnimation,
-                          child,
-                        ) {
-                          const begin = Offset(1.0, 0.0);
-                          const end = Offset.zero;
-                          const curve = Curves.easeInOutQuint;
+                
+                // Action Buttons
+                Row(
+                  children: [
+                    // Continue with Free Trial
+                    Expanded(
+                      child: GradientButton(
+                        onPressed: () {
+                          Navigator.pop(context); // Close dialog
+                          Navigator.pushReplacement(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder: (context, animation, secondaryAnimation) =>
+                                  const LoginScreen(),
+                              transitionsBuilder: (
+                                context,
+                                animation,
+                                secondaryAnimation,
+                                child,
+                              ) {
+                                const begin = Offset(1.0, 0.0);
+                                const end = Offset.zero;
+                                const curve = Curves.easeInOutQuint;
 
-                          var tween = Tween(begin: begin, end: end).chain(
-                            CurveTween(curve: curve),
-                          );
+                                var tween = Tween(begin: begin, end: end).chain(
+                                  CurveTween(curve: curve),
+                                );
 
-                          return SlideTransition(
-                            position: animation.drive(tween),
-                            child: child,
+                                return SlideTransition(
+                                  position: animation.drive(tween),
+                                  child: child,
+                                );
+                              },
+                              transitionDuration: const Duration(milliseconds: 800),
+                            ),
                           );
                         },
-                        transitionDuration: const Duration(milliseconds: 800),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Text(
+                              'Continue with',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            const Text(
+                              'Free Trial',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    );
+                    ),
+                    
+                    const SizedBox(width: 12),
+                    
+                    // Pay Now
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [
+                              Color(0xFF67B26F),
+                              Color(0xFF4A90E2),
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color(0xFF4A90E2).withOpacity(0.3),
+                              blurRadius: 15,
+                              spreadRadius: 2,
+                            ),
+                          ],
+                        ),
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.pop(context); // Close dialog
+                              Navigator.push(
+                                context,
+                                PageRouteBuilder(
+                                  pageBuilder: (context, animation, secondaryAnimation) =>
+                                      const PaymentScreen(),
+                                  transitionsBuilder: (
+                                    context,
+                                    animation,
+                                    secondaryAnimation,
+                                    child,
+                                  ) {
+                                    const begin = Offset(1.0, 0.0);
+                                    const end = Offset.zero;
+                                    const curve = Curves.easeInOutQuint;
+
+                                    var tween = Tween(begin: begin, end: end).chain(
+                                      CurveTween(curve: curve),
+                                    );
+
+                                    return SlideTransition(
+                                      position: animation.drive(tween),
+                                      child: child,
+                                    );
+                                  },
+                                  transitionDuration: const Duration(milliseconds: 800),
+                                ),
+                              );
+                            },
+                            borderRadius: BorderRadius.circular(15),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              alignment: Alignment.center,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Text(
+                                    'Pay Now',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    '\$9.99/month',
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                      color: Colors.white.withOpacity(0.9),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                
+                const SizedBox(height: 16),
+                
+                // Cancel option
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context); // Close dialog
+                    Navigator.pop(context); // Go back to register screen
                   },
-                  child: const Text('Go to Login'),
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.white60,
+                  ),
+                  child: Text(
+                    'Cancel',
+                    style: GoogleFonts.montserrat(
+                      fontSize: 14,
+                      color: Colors.white60,
+                    ),
+                  ),
                 ),
               ],
             ),
           ),
         );
       },
+    );
+  }
+
+  Widget _buildDetailRow(String label, String value) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: GoogleFonts.montserrat(
+            fontSize: 12,
+            color: Colors.white60,
+          ),
+        ),
+        Text(
+          value,
+          style: GoogleFonts.montserrat(
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            color: Colors.white,
+          ),
+        ),
+      ],
     );
   }
 
@@ -719,6 +944,9 @@ class _RegisterScreenState extends State<RegisterScreen>
                                 ),
                                 _buildInfoBullet(
                                   'Maximum 10 family members per family',
+                                ),
+                                _buildInfoBullet(
+                                  '30-day free trial included with registration',
                                 ),
                               ],
                             ),
