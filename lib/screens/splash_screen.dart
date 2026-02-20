@@ -3,7 +3,7 @@ import 'dart:async';
 import 'dart:math';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'login_screen.dart';
+import 'login_screen.dart';  // Updated import
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
